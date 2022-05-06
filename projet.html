@@ -1,0 +1,464 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Roche, papier, ciseaux</title>
+</head>
+<style>
+
+/*image de fond*/
+body{
+	background-image:url("arriere.png");
+	background-size:cover;}
+
+/*écran de sélection du perso*/
+#beginning{
+	background-color:#39F;
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;}
+
+/*bouton sélection link*/	
+#link{
+	background-image:url("link.png");
+	width:500px;
+	height:500px;
+	background-size:cover;
+	display:inline-block;
+	border:black solid 2px;
+	margin-left:100px;
+	margin-top:100px;
+	background-color:#3CC;
+	text-decoration:underline;}
+
+/*bouton sélection zelda*/
+#zelda{background-image:url("zelda.png");
+	width:500px;
+	height:500px;
+	background-size:cover;
+	display:inline-block;
+	margin-left:50px;
+	border:black solid 2px;
+	background-color:#3CC;
+	text-decoration:underline;}
+
+/*la barre de vie du joueur*/
+#vie{
+	background-image:url("coeur.png");
+	width:100px;
+	height:600px;
+	display:inline-block;
+	margin-left:120px;}
+
+/*la barre de vie de l'ordi*/
+#vie2{
+	background-image:url("coeur.png");
+	width:100px;
+	height:600px;
+	display:inline-block;}
+
+/*div du perso du joueur*/
+#good{
+	border:black solid 2px;
+	display:inline-block;
+	width:400px;
+	height:600px;
+	margin-left:0px;
+	margin-top:0px;
+	background-image:url("link.png");
+	background-size:cover;}
+
+/*images choix du joueur*/	
+#rock{
+	border:black solid 2px;
+	display:inline-block;
+	width:80px;
+	height:80px;
+	margin-left:50px;
+	margin-top:500px;
+	background-image:url("roche.png");
+	background-color:#3CC;}
+	
+#paper{
+	border:black solid 2px;
+	display:inline-block;
+	width:80px;
+	height:80px;
+	margin-left:20px;
+	margin-top:500px;
+	background-image:url("papier.png");
+	background-color:#3CC;}
+	
+#cisors{
+	border:black solid 2px;
+	display:inline-block;
+	width:80px;
+	height:80px;
+	margin-left:20px;
+	margin-top:500px;
+	background-image:url("ciseaux.png");
+	background-color:#3CC;}
+
+/*div du perso de l'ordi*/
+#bad{
+	border:black solid 2px;
+	display:inline-block;
+	width:400px;
+	height:600px;
+	margin-left:60px;
+	margin-top:0px;
+	background-image:url("ganon.png");}
+
+
+
+/*images choix de l'ordi*/
+#rock2{
+	border:black solid 2px;
+	display:inline-block;
+	width:80px;
+	height:80px;
+	margin-left:50px;
+	margin-top:500px;
+	background-image:url("roche.png");
+	visibility:hidden;
+	background-color:#3CC;}
+	
+#paper2{
+	border:black solid 2px;
+	display:inline-block;
+	width:80px;
+	height:80px;
+	margin-left:20px;
+	margin-top:500px;
+	background-image:url("papier.png");
+	visibility:hidden;
+	background-color:#3CC;}
+	
+#cisors2{
+	border:black solid 2px;
+	display:inline-block;
+	width:80px;
+	height:80px;
+	margin-left:20px;
+	margin-top:500px;
+	background-image:url("ciseaux.png");
+	visibility:hidden;
+	background-color:#3CC;}
+
+
+
+/*backgroud de fin, perdu et gagné*/
+#endscreen{
+	background-image:url("gamelost.png");
+    top:0px;
+	width:1400px;
+	height:1000px;
+	position:absolute;
+	visibility:hidden;
+	background-size:cover;}
+	
+	
+/*bouton pour recommencer*/	
+#re{
+	margin-left:625px;
+	margin-top:200px;}
+
+</style>
+
+<body>
+
+<!--div vie du joueur-->
+<div id="vie"></div>
+
+<!--div perso du joueur et de ses attaques-->
+<div id="good"><div id="rock" onMouseOver="colorswap1()" onMouseOut="colorback1()" onClick="pierre()"></div><div onMouseOver="colorswap2()"onMouseOut="colorback2()"  id="paper" onClick="feuille()"></div><div id="cisors" onMouseOver="colorswap3()" onMouseOut="colorback3()" onClick="coupe()"></div></div>
+
+<!--div perso de l'ordi et de ses attaques-->
+<div id="bad"><div id="rock2"></div><div id="paper2"></div><div id="cisors2"></div></div>
+
+<!--div vie de l'ordi-->
+<div id="vie2"></div>
+
+<!--les écrans de fin et bouton pour recommencer-->
+<div id="endscreen"><input type="button" value= "Recommencer?" onClick='window.location.reload(false)' id="re"></div>
+
+<!--texte qui dit s'il y a victoire, perte ou égalité-->
+<input type="text" id="rep">
+
+<!--div de sélection du perso, zelda ou link-->
+<div id="beginning">Choisissez votre personnage:<div id="link"onMouseOver="colorswap4()" onMouseOut="colorback4()" onClick="lonk()" >6 vies (facile)</div><div id="zelda" onMouseOver="colorswap5()" onMouseOut="colorback5()" onClick="zeld()">3 vies (difficile)</div></div>
+
+<script>
+
+/*délai avant que les choix d'attaque non sélectionné reviennent*/
+function delai(){
+	document.getElementById("rock").style.visibility="visible"
+	document.getElementById("paper").style.visibility="visible"
+	document.getElementById("cisors").style.visibility="visible"
+	}
+
+/*délai avant que l'image de l'attaque de l'ordi disparaisse*/
+function delai1(){
+	document.getElementById("rock2").style.visibility="hidden"
+	}
+	
+function delai2(){
+	document.getElementById("paper2").style.visibility="hidden"
+	}
+	
+function delai3(){
+	document.getElementById("cisors2").style.visibility="hidden"
+	}
+
+/*banque de songs*/	
+var monson=new Audio()
+monson.src="win.mp3"
+var monson2=new Audio()
+monson2.src="hit.mp3"
+var monson3=new Audio()
+monson3.src="egalite.mp3"
+var monson4=new Audio()
+monson4.src="lost.mp3"
+var monson5=new Audio()
+monson5.src="endwin.mp3"
+var monson6=new Audio()
+monson6.src="rocks.mp3"
+var monson7=new Audio()
+monson7.src="papers.wav"
+var monson8=new Audio()
+monson8.src="scissors.wav"
+var monson9=new Audio()
+monson9.src="zeldanoise.wav"
+
+/*vie de l'ordi, chaque 100 vaut une vie*/
+life2=600
+
+/*vérifi en permanance si l'une des deux barres de vie à atteint zéro*/
+setInterval(verif,10)
+/*si barre du joueur atteint zéro, affiche écran de game over
+si barre de l'ordi atteint zéro, affiche écran de victoire*/
+function verif()
+   {if(life==0){monson4.play()
+                document.getElementById("endscreen").style.visibility="visible"}
+    if(life2==0){monson5.play()
+	             document.getElementById("endscreen").style.visibility="visible"
+				 document.getElementById("endscreen").style.backgroundImage="url('gamewin.jpg')"
+				 document.getElementById("endscreen").style.height=650+"px" }
+	}
+/*vie du joueur est décidé plus bas*/
+
+/*change texte du champ de texte selon si victoire, perdu ou égalité*/
+var reponse=document.getElementById("rep")
+
+/*fonction lorsque joueur choisi pierre*/
+function pierre(){
+	/*met en évidence le choix du joueur en faisant disparaitre les choix non sélectionné pendant 2 sec,
+	le joueur peut tout de même spammer son choix pour aller plus vite*/
+	document.getElementById("paper").style.visibility="hidden"
+	document.getElementById("cisors").style.visibility="hidden"
+	setTimeout(delai,2000)
+	/*pour éviter qu'il y aille deux images d'attaque de l'ordi en même temps*/
+	document.getElementById("rock2").style.visibility="hidden"
+	document.getElementById("paper2").style.visibility="hidden"
+	document.getElementById("cisors2").style.visibility="hidden"
+	/*l'ordi choisi un chiffre aléatoire entre 1, 2 et 3
+	...le chiffre est arrondi à l'entier qui le suit pour éviter d'obtenir 0 et avoir autant de chance d'obtenir 3*/
+	var ordi=Math.ceil(Math.random()*3)
+	/*ordi utilise roche si 1*/
+	if(ordi==1){reponse.value="égalité"
+	            document.getElementById("rock2").style.visibility="visible"
+				setTimeout(delai1,2000)
+				monson3.play()
+				}
+	/*ordi utilise papier si 2*/		
+	if(ordi==2){reponse.value="perdu"
+	            document.getElementById("paper2").style.visibility="visible" 
+				setTimeout(delai2,2000)
+				life=life-100
+				document.getElementById("vie").style.height=life+"px"
+				if(choix==1){monson2.play()}
+				else if(choix=2){monson9.play()}
+				}
+	/*ordi utilise sciseaux si 3*/
+	if(ordi==3){reponse.value="gagné"
+	            document.getElementById("cisors2").style.visibility="visible" 
+				setTimeout(delai3,2000)
+				monson.play()
+				life2=life2-100
+				document.getElementById("vie2").style.height=life2+"px"
+				}
+	/*selon le chiffre choisi par l'ordi,
+	 un message entre égalité, gagné et perdu va s'inscrire dans le chanp de texte,
+	 un song différent va jouer,
+	 l'ordi ou le joueur va perdre une vie sauf s'il y a égalité,
+	 une image représentant l'attaque de l'ordi va s'afficher puis disparaitre après 2 secondes*/
+	}
+
+/*fonction lorsque joueur choisi feuille*/
+function feuille(){
+	/*met en évidence le choix du joueur en faisant disparaitre les choix non sélectionné pendant 2 sec,
+	le joueur peut tout de même spammer son choix pour aller plus vite*/
+	document.getElementById("rock").style.visibility="hidden"
+	document.getElementById("cisors").style.visibility="hidden"
+	setTimeout(delai,2000)
+	/*pour éviter qu'il y aille deux images d'attaque de l'ordi en même temps*/
+	document.getElementById("rock2").style.visibility="hidden"
+	document.getElementById("paper2").style.visibility="hidden"
+	document.getElementById("cisors2").style.visibility="hidden"
+	/*l'ordi choisi un chiffre aléatoire entre 1, 2 et 3
+	...le chiffre est arrondi à l'entier qui le suit pour éviter d'obtenir 0 et avoir autant de chance d'obtenir 3*/
+	var ordi=Math.ceil(Math.random()*3)
+	/*ordi utilise roche si 1*/
+	if(ordi==1){reponse.value="gagné"
+	            document.getElementById("rock2").style.visibility="visible"
+				setTimeout(delai1,2000)
+				monson.play()
+				life2=life2-100
+				document.getElementById("vie2").style.height=life2+"px"
+				}
+	/*ordi utilise papier si 2*/			
+	if(ordi==2){reponse.value="égalité"
+	            document.getElementById("paper2").style.visibility="visible"
+				setTimeout(delai2,2000)
+				monson3.play()
+				}
+	/*ordi utilise sciseaux si 3*/
+	if(ordi==3){reponse.value="perdu"
+	            document.getElementById("cisors2").style.visibility="visible"
+				setTimeout(delai3,2000)
+				life=life-100
+				document.getElementById("vie").style.height=life+"px"
+				if(choix==1){monson2.play()}
+				else if(choix=2){monson9.play()}
+				}
+	/*selon le chiffre choisi par l'ordi,
+	 un message entre égalité, gagné et perdu va s'inscrire dans le chanp de texte,
+	 un song différent va jouer,
+	 l'ordi ou le joueur va perdre une vie sauf s'il y a égalité,
+	 une image représentant l'attaque de l'ordi va s'afficher puis disparaitre après 2 secondes*/
+	}
+
+/*fonction lorsque joueur choisi sciseaux*/	
+function coupe(){
+	/*met en évidence le choix du joueur en faisant disparaitre les choix non sélectionné pendant 2 sec,
+	le joueur peut tout de même spammer son choix pour aller plus vite*/
+	document.getElementById("paper").style.visibility="hidden"
+	document.getElementById("rock").style.visibility="hidden"
+	setTimeout(delai,2000)
+	/*pour éviter qu'il y aille deux images d'attaque de l'ordi en même temps*/
+	document.getElementById("rock2").style.visibility="hidden"
+	document.getElementById("paper2").style.visibility="hidden"
+	document.getElementById("cisors2").style.visibility="hidden"
+	/*l'ordi choisi un chiffre aléatoire entre 1, 2 et 3
+	...le chiffre est arrondi à l'entier qui le suit pour éviter d'obtenir 0 et avoir autant de chance d'obtenir 3*/
+	var ordi=Math.ceil(Math.random()*3)
+	/*ordi utilise roche si 1*/
+	if(ordi==1){reponse.value="perdu"
+	            document.getElementById("rock2").style.visibility="visible"
+				setTimeout(delai1,2000)
+				life=life-100
+				document.getElementById("vie").style.height=life+"px"
+				if(choix==1){monson2.play()}
+				else if(choix=2){monson9.play()}
+				}
+	/*ordi utilise papier si 2*/
+	if(ordi==2){reponse.value="gagné"
+	            document.getElementById("paper2").style.visibility="visible" 
+				setTimeout(delai2,2000)
+				monson.play()
+				life2=life2-100
+				document.getElementById("vie2").style.height=life2+"px"
+				}
+	/*ordi utilise sciseaux si 3*/
+	if(ordi==3){reponse.value="égalité"
+	            document.getElementById("cisors2").style.visibility="visible" 
+				setTimeout(delai3,2000)
+				monson3.play()
+				}
+	/*selon le chiffre choisi par l'ordi,
+	 un message entre égalité, gagné et perdu va s'inscrire dans le chanp de texte,
+	 un song différent va jouer,
+	 l'ordi ou le joueur va perdre une vie sauf s'il y a égalité,
+	 une image représentant l'attaque de l'ordi va s'afficher puis disparaitre après 2 secondes*/
+	}
+
+/*change la couleur du background du choix du joueur et fait un song lorsque la souri passe sur une des images des choix du joueur*/
+function colorswap1(){
+	document.getElementById("rock").style.backgroundColor="green"
+	monson6.play()
+	}
+	
+function colorswap2(){
+	document.getElementById("paper").style.backgroundColor="green"
+	monson7.play()
+	}
+	
+function colorswap3(){
+	document.getElementById("cisors").style.backgroundColor="green"
+	monson8.play()
+	}
+	
+/*change la couleur du background des div des selections du perso lorsque la souris passe sur l'un des perso*/
+function colorswap4(){
+	document.getElementById("link").style.backgroundColor="green"
+	}
+	
+function colorswap5(){
+	document.getElementById("zelda").style.backgroundColor="green"
+	}
+
+/*ramène l'ancienne couleur de fond du choix du joueur lorsque la souri n'est plus sur l'une des images des choix des joueurs*/
+function colorback1(){
+	document.getElementById("rock").style.backgroundColor="#3CC"
+	}
+	
+function colorback2(){
+	document.getElementById("paper").style.backgroundColor="#3CC"
+	}
+	
+function colorback3(){
+	document.getElementById("cisors").style.backgroundColor="#3CC"
+	}
+	
+/*ramène l'ancienne couleur de fond des boutons de sélection du perso lorsque la souris n'est plus sur le bouton*/
+function colorback4(){
+	document.getElementById("link").style.backgroundColor="#3CC"
+	}
+	
+function colorback5(){
+	document.getElementById("zelda").style.backgroundColor="#3CC"
+	}
+	
+/*image de link et 6 vies lorsque joueur sélectionne link*/
+function lonk(){
+	/*song link lorsque perd un tour*/
+	choix=1
+	/*vie du joueur, chaque 100 vaut une vie*/
+	life=600
+	/*fait disparaitre l'écran de sélection du perso*/
+	document.getElementById("beginning").style.visibility="hidden"
+	/*song sélection*/
+	monson2.play()
+	}
+	
+/*image de zelda et 3 vies lorsque joueur sélestionne zelda*/
+function zeld(){
+	/*song zelda lorsque perd un tour*/
+	choix=2
+	/*vie du joueur, chaque 100 vaut une vie*/	
+	life=300
+	/*fait disparaitre l'écran de sélection du perso*/
+	document.getElementById("beginning").style.visibility="hidden"
+	/*change la longueur de la div vie pour 3 vies*/
+	document.getElementById("vie").style.height=life+"px"
+	/*change image div good pour image zelda*/
+	document.getElementById("good").style.backgroundImage="url('zelda.png')"
+	/*song sélection*/
+	monson9.play()
+	}
+
+</script>
+</body>
+</html>
